@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+# IDE specific files
+*.xcodeproj
+
 # Compiled Object files
 *.slo
 *.lo
