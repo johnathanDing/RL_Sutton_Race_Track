@@ -30,7 +30,7 @@ public:
     // To give public access to track size
     int getTrackSize() const;
     // To give public access to a const reference of race track
-    const vector_2D& getRackTrack() const;
+    const vector_2D& getRaceTrack() const;
     
 private:
     // Generates race track given track size
