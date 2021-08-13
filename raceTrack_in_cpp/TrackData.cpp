@@ -6,9 +6,9 @@
 //
 
 #include "TrackData.hpp"
+#include <time.h>
 #include <vector>
 #include <random>
-#include <time.h>
 
 TrackData::TrackData(int trackSizeInput) :
     trackSize{trackSizeInput},
@@ -23,7 +23,7 @@ int TrackData::getTrackSize() const
     return trackSize;
 };
 
-const vector_2D& TrackData::getRackTrack() const
+const vector_2D& TrackData::getRaceTrack() const
 {
     return raceTrack;
 };
@@ -50,7 +50,7 @@ void TrackData::generateRaceTrack()
     
     // Initilize random start line
     int startLineWidth {startLineRNG(mersenneEng)};
-    int startLineLeftLim {trackSize-1+startLineWidth*3/2};
+    int startLineLeftLim {trackSize-1-startLineWidth*3/2};
     int startLineLeft {0};
     if (startLineLeftLim > 0) {
         rand_uni_int limRNG {0, startLineLeftLim};
@@ -69,22 +69,39 @@ void TrackData::generateRaceTrack()
     int rowLeft {startLineLeft};
     int rowRight {startLineRight};
     // Weighted RNG
-    rand_choices left_before {1, 1, 1};
-    rand_choices left_after {1, 3, 3};
+    rand_choices leftBefore {1, 1, 1}; // left bound before turning point
+    rand_choices leftAfter {1, 3, 3};  // left bound after turning point
+    rand_choices rightBefore {3, 1};   // right bound before turning point
+    rand_choices rightAfter {1, 2, 2}; // right bound after turning point
     
-    
-    // Possible next move of track left boundary
-    int nextMoveLeft[3] {-1, 0, 1};
+    // Possible next moves
+    int nextMoveLeft[3] {-1, 0, 1};     // left bound
+    int nextMoveRightBefore[2] {0, 1};  // right bound before turning point
+    int nextMoveRightAfter[3] {0,1,trackSize-1-rowRight}; // right bound after turning point
     
     for (int i_row{1}; i_row < trackSize; ++i_row) {
-        // Move
+        // Move left bound according to above rules
         if (i_row < turningPoint) {
-            rowLeft = std::max(0, rowLeft
-                               + nextMoveLeft[left_before(mersenneEng)]);
+            rowLeft += nextMoveLeft[leftBefore(mersenneEng)];
         } else {
-            rowLeft = std::max(0, rowLeft
-                               + nextMoveLeft[left_after(mersenneEng)]);
+            rowLeft += nextMoveLeft[leftAfter(mersenneEng)];
         }
+        rowLeft = std::max(0, rowLeft);
+        
+        // Move right bound according to above rules
+        if (rowRight < trackSize-1) {
+            if (i_row < turningPoint) {
+                rowRight += nextMoveRightBefore[rightBefore(mersenneEng)];
+            } else {
+                rowRight += nextMoveRightAfter[rightAfter(mersenneEng)];
+            }
+        }
+        rowRight = std::min(trackSize-1, rowRight);
+        
+        for (int i_col{rowLeft}; i_col <= rowRight; ++i_col) {
+            raceTrack[i_row][i_col] = 1;
+        }
+        
     }
     
     return;

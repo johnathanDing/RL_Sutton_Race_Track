@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		1008732626B76441004AA362 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1008732526B76441004AA362 /* main.cpp */; };
 		1059E1FA26C1AD5A00943EA2 /* TrackData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1059E1F826C1AD5A00943EA2 /* TrackData.cpp */; };
+		1059E22226C654D800943EA2 /* TrackData.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 1059E1F926C1AD5A00943EA2 /* TrackData.hpp */; };
+		1059E22A26C654FB00943EA2 /* RaceTrackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1059E22926C654FB00943EA2 /* RaceTrackTests.m */; };
+		1059E23026C6552500943EA2 /* TrackDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1059E22F26C6552500943EA2 /* TrackDataTests.m */; };
+		1059E23126C6552500943EA2 /* TrackDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1059E22F26C6552500943EA2 /* TrackDataTests.m */; };
+		1059E23226C6573F00943EA2 /* TrackData.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 1059E1F926C1AD5A00943EA2 /* TrackData.hpp */; };
+		1059E23326C658AC00943EA2 /* TrackData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1059E1F826C1AD5A00943EA2 /* TrackData.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,10 +34,21 @@
 		1008732526B76441004AA362 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1059E1F826C1AD5A00943EA2 /* TrackData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackData.cpp; sourceTree = "<group>"; };
 		1059E1F926C1AD5A00943EA2 /* TrackData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TrackData.hpp; sourceTree = "<group>"; };
+		1059E22726C654FB00943EA2 /* RaceTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RaceTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1059E22926C654FB00943EA2 /* RaceTrackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RaceTrackTests.m; sourceTree = "<group>"; };
+		1059E22B26C654FB00943EA2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1059E22F26C6552500943EA2 /* TrackDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackDataTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1008731F26B76441004AA362 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1059E22426C654FB00943EA2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -45,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				1008732426B76441004AA362 /* raceTrack_in_cpp */,
+				1059E22826C654FB00943EA2 /* RaceTrackTests */,
 				1008732326B76441004AA362 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				1008732226B76441004AA362 /* raceTrack_in_cpp */,
+				1059E22726C654FB00943EA2 /* RaceTrackTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,6 +84,16 @@
 				1059E1F926C1AD5A00943EA2 /* TrackData.hpp */,
 			);
 			path = raceTrack_in_cpp;
+			sourceTree = "<group>";
+		};
+		1059E22826C654FB00943EA2 /* RaceTrackTests */ = {
+			isa = PBXGroup;
+			children = (
+				1059E22F26C6552500943EA2 /* TrackDataTests.m */,
+				1059E22926C654FB00943EA2 /* RaceTrackTests.m */,
+				1059E22B26C654FB00943EA2 /* Info.plist */,
+			);
+			path = RaceTrackTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -87,6 +116,23 @@
 			productReference = 1008732226B76441004AA362 /* raceTrack_in_cpp */;
 			productType = "com.apple.product-type.tool";
 		};
+		1059E22626C654FB00943EA2 /* RaceTrackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1059E22C26C654FB00943EA2 /* Build configuration list for PBXNativeTarget "RaceTrackTests" */;
+			buildPhases = (
+				1059E22326C654FB00943EA2 /* Sources */,
+				1059E22426C654FB00943EA2 /* Frameworks */,
+				1059E22526C654FB00943EA2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RaceTrackTests;
+			productName = RaceTrackTests;
+			productReference = 1059E22726C654FB00943EA2 /* RaceTrackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -96,6 +142,9 @@
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					1008732126B76441004AA362 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					1059E22626C654FB00943EA2 = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
@@ -114,17 +163,41 @@
 			projectRoot = "";
 			targets = (
 				1008732126B76441004AA362 /* raceTrack_in_cpp */,
+				1059E22626C654FB00943EA2 /* RaceTrackTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1059E22526C654FB00943EA2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1008731E26B76441004AA362 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1059E22226C654D800943EA2 /* TrackData.hpp in Sources */,
+				1059E23026C6552500943EA2 /* TrackDataTests.m in Sources */,
 				1008732626B76441004AA362 /* main.cpp in Sources */,
 				1059E1FA26C1AD5A00943EA2 /* TrackData.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1059E22326C654FB00943EA2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1059E23226C6573F00943EA2 /* TrackData.hpp in Sources */,
+				1059E23326C658AC00943EA2 /* TrackData.cpp in Sources */,
+				1059E22A26C654FB00943EA2 /* RaceTrackTests.m in Sources */,
+				1059E23126C6552500943EA2 /* TrackDataTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +322,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PUUP8HC644;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-pedantic-errors",
@@ -265,11 +341,52 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PUUP8HC644;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-pedantic-errors",
 					"-std=c++17",
 				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		1059E22D26C654FB00943EA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PUUP8HC644;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				INFOPLIST_FILE = RaceTrackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = breakfasttiffany.RaceTrackTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1059E22E26C654FB00943EA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = PUUP8HC644;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				INFOPLIST_FILE = RaceTrackTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = breakfasttiffany.RaceTrackTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -291,6 +408,15 @@
 			buildConfigurations = (
 				1008732A26B76441004AA362 /* Debug */,
 				1008732B26B76441004AA362 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1059E22C26C654FB00943EA2 /* Build configuration list for PBXNativeTarget "RaceTrackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1059E22D26C654FB00943EA2 /* Debug */,
+				1059E22E26C654FB00943EA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
