@@ -2,7 +2,7 @@
 *.d
 
 # IDE specific files
-*.xcodeproj
+*.xcodeproj/
 
 # Compiled Object files
 *.slo
