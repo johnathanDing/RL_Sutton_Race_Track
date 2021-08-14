@@ -40,7 +40,7 @@ void TrackData::generateRaceTrack()
 {
     // Define the min/max starting line width
     int minLineWidth {trackSize/6};
-    int maxLineWidth {trackSize/2};
+    int maxLineWidth {trackSize/3};
     
     // System clock Mersenne engine to avoid repeated race tracks
     std::mt19937 mersenneEng
@@ -48,7 +48,7 @@ void TrackData::generateRaceTrack()
     
     // Make turning point a bit past half way
     rand_uni_int turningPntRNG
-    {trackSize/2, trackSize*2/3};
+    {trackSize*2/3, trackSize*5/6};
     // Make start line width between min/max width above
     rand_uni_int startLineRNG
     {minLineWidth, maxLineWidth};
@@ -58,7 +58,7 @@ void TrackData::generateRaceTrack()
     
     // Initilize random start line
     int startLineWidth {startLineRNG(mersenneEng)};
-    int startLineLeftLim {trackSize-1-startLineWidth*3/2};
+    int startLineLeftLim {trackSize-1-startLineWidth*2};
     int startLineLeft {0};
     if (startLineLeftLim > 0) {
         rand_uni_int limRNG {0, startLineLeftLim};
@@ -80,7 +80,7 @@ void TrackData::generateRaceTrack()
     rand_choices leftBefore {1, 1, 1}; // left bound before turning point
     rand_choices leftAfter {1, 3, 3};  // left bound after turning point
     rand_choices rightBefore {3, 1};   // right bound before turning point
-    rand_choices rightAfter {1, 2, 2}; // right bound after turning point
+    rand_choices rightAfter {1, 2, 1}; // right bound after turning point
     
     // Possible next moves
     int nextMoveLeft[3] {-1, 0, 1};     // left bound
