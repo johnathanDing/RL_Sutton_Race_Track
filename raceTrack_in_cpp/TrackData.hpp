@@ -8,7 +8,7 @@
 #ifndef TrackData_hpp
 #define TrackData_hpp
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <vector>
 #include <random>
 
@@ -16,6 +16,7 @@ using rand_uni_int = std::uniform_int_distribution<>;
 using rand_choices = std::discrete_distribution<>;
 using vector_2D = std::vector<std::vector<int>>;
 
+/// Class that generates and stores race track
 class TrackData
 {
 private:

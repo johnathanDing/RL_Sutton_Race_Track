@@ -9,23 +9,36 @@
 #define TrackVisualizer_hpp
 
 #include "TrackData.hpp"
-#include <SFML/Audio.hpp>
+#include <iostream>
 #include <SFML/Graphics.hpp>
-#include <stdio.h>
 
+using tuple_list = std::vector<std::tuple<int, int, int, int>>;
+
+/// Class that creates a window to visualize race track and car movement
 class TrackVisualizer
 {
 private:
     int trackSize;
     // A constant reference to given race track
     const vector_2D& raceTrack;
-    bool hasWindow;
+    // Container of a SFML window
+    sf::RenderWindow trackWindow;
+    // Pixel size of a single grid
+    float gridPixel;
     
 public:
     // Constructor takes in race track info from TrackData
     TrackVisualizer(const TrackData& inputTrack);
     // Public method for drawing race track given car state array
-    void drawRaceTrack(std::vector<std::tuple<int, int, int, int>> carState);
+    void drawRaceTrack(tuple_list carTrajectory);
+    
+private:
+    // Open a window
+    void startWindow();
+    // Draw race track grid on an open window
+    void drawTrackGrid();
+    // Draw car position on grid
+    void drawCarState(std::tuple<int, int, int, int> carState);
 };
 
 #endif /* TrackVisualizer_hpp */
