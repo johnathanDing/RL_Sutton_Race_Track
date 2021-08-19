@@ -96,8 +96,8 @@ envResponse TrackEnv::getEnvResponse
             // Assert the velocity constrains.
             // Ideally, this should have been taken care of by the policy.
             assert((nextVelo_i>=0 && nextVelo_j>=0) && "Negative velocity encountered.");
-            assert((nextVelo_i<=5 && nextVelo_j<=5) && "Larger-than-5 velocity encountered.");
-            assert((nextVelo_i>0 || nextVelo_j>0 || nextPos_i==0)
+            assert((nextVelo_i<5 && nextVelo_j<5) && "Larger-than-5 velocity encountered.");
+            assert(!(nextVelo_i==0 || nextVelo_j==0)
                    && "All zero velocity encountered at non-start line.");
             // If all assertions passed, the next velocity is valid
             nextResp.reward = -1;
