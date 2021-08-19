@@ -6,14 +6,17 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TrackFunctions.hpp"
 #import "TrackData.hpp"
 #import "TrackEnv.hpp"
+#import "TrackFunctions.hpp"
 #import <algorithm>
 #import <vector>
 
 
 @interface TrackFunctionsTests : XCTestCase
+{
+    
+}
 
 @end
 
@@ -29,10 +32,33 @@
 
 - (void)testActionSpace {
     state_tuple testCarState;
+    std::vector<std::tuple<int, int>> testAction;
     
     testCarState = std::make_tuple(0, 0, 0, 0);
     testAction = actionSpace(testCarState);
-    XCTAssertTrue(std::find(testAction.begin(), <#_InputIterator __last#>, <#const _Tp &__value_#>));
+    
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,0)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,1)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,1)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,0)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,-1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,0)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,-1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,-1)) == testAction.end());
+    
+    testCarState = std::make_tuple(0, 0, 4, 4);
+    testAction = actionSpace(testCarState);
+    
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,0)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,0)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,-1)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,0)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(-1,1)) == testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(0,-1)) != testAction.end());
+    XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,-1)) == testAction.end());
 }
 
 
