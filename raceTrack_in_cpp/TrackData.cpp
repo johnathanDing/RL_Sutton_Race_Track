@@ -78,9 +78,9 @@ void TrackData::generateRaceTrack()
     int rowRight {startLineRight};
     // Weighted RNG
     rand_choices leftBefore {1, 1, 1}; // left bound before turning point
-    rand_choices leftAfter {1, 3, 3};  // left bound after turning point
+    rand_choices leftAfter {1, 2, 4};  // left bound after turning point
     rand_choices rightBefore {3, 1};   // right bound before turning point
-    rand_choices rightAfter {1, 2, 1}; // right bound after turning point
+    rand_choices rightAfter {1, 2, 2}; // right bound after turning point
     
     // Possible next moves
     int nextMoveLeft[3] {-1, 0, 1};     // left bound

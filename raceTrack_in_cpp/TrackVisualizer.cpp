@@ -12,7 +12,7 @@
 TrackVisualizer::TrackVisualizer(const TrackData& inputTrack):
 trackSize (inputTrack.getTrackSize()),
 raceTrack (inputTrack.getRaceTrack()),
-gridPixel (30.0)
+gridPixel (20.0)
 {
     std::cout << "Track Visualizer starting..." << "\n";
 };
@@ -60,7 +60,7 @@ void TrackVisualizer::drawTrackGrid()
 
 /// Draws the current position of car
 /// @param carState tuple representing the current state of car
-void TrackVisualizer::drawCarState(std::tuple<int, int, int, int> carState)
+void TrackVisualizer::drawCarState(state_tuple carState)
 {
     // Set up car squre object
     sf::RectangleShape carGrid (sf::Vector2f(gridPixel, gridPixel));

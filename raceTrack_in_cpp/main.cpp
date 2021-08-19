@@ -7,11 +7,13 @@
 
 #include "TrackData.hpp"
 #include "TrackVisualizer.hpp"
+#include "TrackEnv.hpp"
+#include "TrackFunctions.hpp"
 #include <iostream>
 
 int main() {
     
-    int trackSize {40};
+    int trackSize {100};
     TrackData testTrack {trackSize};
     TrackVisualizer testVisual {testTrack};
     
@@ -20,7 +22,14 @@ int main() {
         testCarTraj.push_back(std::make_tuple(0, i, 0, 0));
     }
     
-    testVisual.drawRaceTrack(testCarTraj);
+//    testVisual.drawRaceTrack(testCarTraj);
+    
+    state_tuple testState {std::make_tuple(0, 0, 0, 0)};
+    
+    for (std::tuple<int, int> acc : actionSpace(testState)) {
+        std::cout << "(" << std::get<0>(acc) << ", " << std::get<1>(acc) << "), ";
+    }
+    std::cout<< "\n";
     
 //    std::cout << testTrack.getTrackSize() << '\n';
     

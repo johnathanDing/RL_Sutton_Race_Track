@@ -9,6 +9,7 @@
 #define TrackVisualizer_hpp
 
 #include "TrackData.hpp"
+#include "TrackEnv.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -38,7 +39,7 @@ private:
     // Draw race track grid on an open window
     void drawTrackGrid();
     // Draw car position on grid
-    void drawCarState(std::tuple<int, int, int, int> carState);
+    void drawCarState(state_tuple carState);
 };
 
 #endif /* TrackVisualizer_hpp */
