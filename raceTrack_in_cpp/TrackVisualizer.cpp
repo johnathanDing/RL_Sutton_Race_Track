@@ -7,8 +7,7 @@
 
 #include "TrackVisualizer.hpp"
 
-/// TrackVisualizer constructor
-/// @param inputTrack Input TrackData class instance.
+
 TrackVisualizer::TrackVisualizer(const TrackData& inputTrack):
 trackSize (inputTrack.getTrackSize()),
 raceTrack (inputTrack.getRaceTrack()),
@@ -17,7 +16,7 @@ gridPixel (20.0)
     std::cout << "Track Visualizer starting..." << "\n";
 };
 
-/// Starts a race track window
+
 void TrackVisualizer::startWindow()
 {
     int windowHeight {trackSize * static_cast<int>(gridPixel)};
@@ -26,7 +25,7 @@ void TrackVisualizer::startWindow()
     trackWindow.setVerticalSyncEnabled(true);
 };
 
-/// Draw race track grid to window
+
 void TrackVisualizer::drawTrackGrid()
 {
     // Set up a single grid with inward outlines
@@ -58,8 +57,7 @@ void TrackVisualizer::drawTrackGrid()
     }
 };
 
-/// Draws the current position of car
-/// @param carState tuple representing the current state of car
+
 void TrackVisualizer::drawCarState(state_tuple carState)
 {
     // Set up car squre object
@@ -72,8 +70,7 @@ void TrackVisualizer::drawCarState(state_tuple carState)
     trackWindow.draw(carGrid);
 };
 
-/// Draws the race track given a car trajectory
-/// @param carTrajectory A full trajectory (list) of car states
+
 void TrackVisualizer::drawRaceTrack(tuple_list carTrajectory)
 {
     // Get the length of the car trajectory

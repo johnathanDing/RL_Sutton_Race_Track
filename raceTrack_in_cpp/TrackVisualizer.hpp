@@ -28,17 +28,23 @@ private:
     float gridPixel;
     
 public:
-    // Constructor takes in race track info from TrackData
+    /// TrackVisualizer constructor
+    /// @param inputTrack Input TrackData class instance.
     TrackVisualizer(const TrackData& inputTrack);
-    // Public method for drawing race track given car state array
+    
+    /// Draws the race track given a car trajectory
+    /// @param carTrajectory A full trajectory (list) of car states
     void drawRaceTrack(tuple_list carTrajectory);
     
 private:
-    // Open a window
+    /// Starts a race track window
     void startWindow();
-    // Draw race track grid on an open window
+    
+    /// Draw race track grid to window
     void drawTrackGrid();
-    // Draw car position on grid
+    
+    /// Draws the current position of car
+    /// @param carState tuple representing the current state of car
     void drawCarState(state_tuple carState);
 };
 

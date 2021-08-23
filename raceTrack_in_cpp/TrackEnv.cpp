@@ -7,8 +7,7 @@
 
 #include "TrackEnv.hpp"
 
-/// Construct track parameters based on input TrackData
-/// @param inputTrack Input TrackData class instance
+
 TrackEnv::TrackEnv(const TrackData& inputTrack):
 trackSize(inputTrack.getTrackSize()),
 raceTrack(inputTrack.getRaceTrack())
@@ -27,7 +26,7 @@ raceTrack(inputTrack.getRaceTrack())
     }
 };
 
-/// Returns a random starting state as state (4-) tuple
+
 state_tuple TrackEnv::getStartState()
 {
     // System clock Mersenne engine
@@ -41,9 +40,7 @@ state_tuple TrackEnv::getStartState()
     return std::make_tuple(std::get<0>(startPos), std::get<1>(startPos), 0, 0);
 };
 
-/// Given current state and action (acceleration), return the next environment response struct
-/// @param currState Current state tuple
-/// @param acceleration Chosen action
+
 envResponse TrackEnv::getEnvResponse
  (state_tuple currState, std::tuple<int, int> acceleration)
 {
