@@ -11,12 +11,16 @@
 #include "TrackData.hpp"
 #include "TrackEnv.hpp"
 #include "TrackFunctions.hpp"
+#include <iostream>
 #include <vector>
 #include <random>
 #include <unordered_map>
+#include <algorithm>
+#include <iterator>
 
 using stateActionSpaceType = std::unordered_map<state_tuple, std::vector<std::tuple<int, int>>>;
 using stateActionValueType = std::unordered_map<state_tuple, std::vector<double>>;
+using stateVisitCountType = std::unordered_map<state_tuple, int>;
 using targetPolicyType = std::unordered_map<state_tuple, std::tuple<int, int>>;
 
 /// Class that stores state action (Q-) values, makes and modifies target and behavior policies
@@ -25,12 +29,17 @@ class TrackPolicy
 private:
     // Stores the state-action space
     stateActionSpaceType stateActionSpace;
+    // Stores the state-action cumulative weight
+    stateActionValueType stateActionWeight;
     // Stores the state-action value
     stateActionValueType stateActionValue;
+    // Stores the state-action count of visits
+    stateVisitCountType stateVisitCount;
     // A constantly updating target policy on the go
     targetPolicyType targetPolicy;
     // Soft parameter for the behavior policy
     double epsilonSoft;
+    
 public:
     /// Constructor for the TrackPolicy class
     /// @param epsilonInput Initial value for the behavior policy epsilon soft parameter. Default is 1.0, a uniformly random policy.
@@ -39,8 +48,10 @@ public:
     /// Updates the state-action (Q-) value according to new observed values. Returns void type.
     /// @param carState Car state to be updated
     /// @param acc Action (Acceleration) to be updated
-    /// @param newVal Newly observed state-action value
-    void updateStateActionVal(state_tuple carState, std::tuple<int, int> acc, double newVal);
+    /// @param newReturn G, the new return value to be updated
+    /// @param newWeight W, the new sampling weight to be updated
+    void updateStateActionVal(state_tuple carState, std::tuple<int, int> acc,
+                              double newReturn, double newWeight);
     
     /// Returns the current state-aciton value.
     /// @param carState Car state to be inquired
@@ -61,6 +72,11 @@ public:
     /// Returns the action and probability (importance sampling) under behavior policy for a specific state
     /// @param carState Car state to be inquired
     std::tuple<int, int, double> getBehavePolicy(state_tuple carState);
+    
+private:
+    /// Re-calculate and update the target policy
+    /// @param carState Car state to be updated
+    void updateTargetPolicy(state_tuple carState);
 };
 
 #endif /* TrackPolicy_hpp */
