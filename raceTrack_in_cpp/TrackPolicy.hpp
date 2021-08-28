@@ -14,14 +14,16 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <unordered_map>
+#include <map>
 #include <algorithm>
 #include <iterator>
+#include <time.h>
+#include <math.h>
 
-using stateActionSpaceType = std::unordered_map<state_tuple, std::vector<std::tuple<int, int>>>;
-using stateActionValueType = std::unordered_map<state_tuple, std::vector<double>>;
-using stateVisitCountType = std::unordered_map<state_tuple, int>;
-using targetPolicyType = std::unordered_map<state_tuple, std::tuple<int, int>>;
+using stateActionSpaceType = std::map<state_tuple, std::vector<std::tuple<int, int>>>;
+using stateActionValueType = std::map<state_tuple, std::vector<double>>;
+using stateVisitCountType = std::map<state_tuple, int>;
+using targetPolicyType = std::map<state_tuple, std::tuple<int, int>>;
 
 /// Class that stores state action (Q-) values, makes and modifies target and behavior policies
 class TrackPolicy
@@ -39,11 +41,14 @@ private:
     targetPolicyType targetPolicy;
     // Soft parameter for the behavior policy
     double epsilonSoft;
+    // Threshold for soft behavior policy to become greedy
+    int stateVisitThreshold;
     
 public:
     /// Constructor for the TrackPolicy class
     /// @param epsilonInput Initial value for the behavior policy epsilon soft parameter. Default is 1.0, a uniformly random policy.
-    TrackPolicy(double epsilonInput = 1.0);
+    /// @param stateVisitThreshInput How many visits to a state before starting to converge behavior policy
+    TrackPolicy(double epsilonInput = 1.0, int stateVisitThreshInput = 100);
     
     /// Updates the state-action (Q-) value according to new observed values. Returns void type.
     /// @param carState Car state to be updated
@@ -58,10 +63,6 @@ public:
     /// @param acc Action (Acceleration) to be inquired
     double getStateActionVal(state_tuple carState, std::tuple<int, int> acc);
     
-    /// Returns the action under the current target policy for a specific state
-    /// @param carState Car state to be inquired
-    std::tuple<int, int> getTargetPolicy(state_tuple carState);
-    
     /// Sets the epsilon soft parameter of the behavior state
     /// @param epsilon Epsilon soft parameter
     void setBehaveEpsilon(double epsilon);
@@ -71,7 +72,16 @@ public:
     
     /// Returns the action and probability (importance sampling) under behavior policy for a specific state
     /// @param carState Car state to be inquired
-    std::tuple<int, int, double> getBehavePolicy(state_tuple carState);
+    std::tuple<int, int> getBehavePolicy(state_tuple carState);
+    
+    /// Get the probability of getting such action from behavior policy for importance sampling
+    /// @param carState Car state inquired
+    /// @param acc Action inquired
+    double getBehaveProb(state_tuple carState, std::tuple<int, int> acc);
+    
+    /// Returns the action under the current target policy for a specific state
+    /// @param carState Car state to be inquired
+    std::tuple<int, int> getTargetPolicy(state_tuple carState);
     
 private:
     /// Re-calculate and update the target policy

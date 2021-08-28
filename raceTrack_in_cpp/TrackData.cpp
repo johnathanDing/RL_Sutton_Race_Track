@@ -6,10 +6,6 @@
 //
 
 #include "TrackData.hpp"
-#include <time.h>
-#include <iostream>
-//#include <vector>
-//#include <random>
 
 
 TrackData::TrackData(int trackSizeInput) :

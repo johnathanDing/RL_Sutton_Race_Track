@@ -11,6 +11,8 @@
 //#include <stdio.h>
 #include <vector>
 #include <random>
+#include <time.h>
+#include <iostream>
 
 using rand_uni_int = std::uniform_int_distribution<>;
 using rand_choices = std::discrete_distribution<>;

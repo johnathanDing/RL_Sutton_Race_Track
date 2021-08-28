@@ -13,7 +13,7 @@
 
 int main() {
     
-    int trackSize {100};
+    int trackSize {50};
     TrackData testTrack {trackSize};
     TrackVisualizer testVisual {testTrack};
     
