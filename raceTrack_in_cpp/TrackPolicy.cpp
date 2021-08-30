@@ -113,13 +113,21 @@ std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState)
     std::uniform_real_distribution<double> behaveRNG {0.0, 1.0};
     double behaveRandNum = behaveRNG(mersenneEng);
     // A dynamic epsilon:
+    double epsilonDynamic;
+    // If car state is new:
+    // Can only choose a completely random action
+    if (stateActionSpace.find(carState) == stateActionSpace.end()) {
+        epsilonDynamic = 1.0;
+    }
+    // If car state has been visited:
     // equal to epsilonSoft if state visit count is less than 100
     // grow smaller as visit count increases further
     // This ensures behaviro policy maximizes exploration when state visit count is low
     // And converges to greedy policy when state visiti count is high
-    double epsilonDynamic;
-    epsilonDynamic = stateVisitCount[carState] <= stateVisitThreshold ?
-    epsilonSoft : epsilonSoft/exp((stateVisitCount[carState] - stateVisitThreshold)/stateVisitThreshold);
+    else {
+        epsilonDynamic = stateVisitCount[carState] <= stateVisitThreshold ?
+        epsilonSoft : epsilonSoft/exp((stateVisitCount[carState] - stateVisitThreshold)/stateVisitThreshold);
+    }
     
     // With epsilonDynamic probability, choose a random viable action
     if (behaveRandNum <= epsilonDynamic) {
@@ -127,7 +135,7 @@ std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState)
         std::vector<std::tuple<int, int>> allAvailableAcc;
         allAvailableAcc = actionSpace(carState);
         // Choose and return a random one
-        rand_uni_int accRNG {0, static_cast<int>(allAvailableAcc.size())};
+        rand_uni_int accRNG {0, static_cast<int>(allAvailableAcc.size())-1};
         return allAvailableAcc[accRNG(mersenneEng)];
     }
     // With 1-epsilonDynamic probability, choose the greedy action
