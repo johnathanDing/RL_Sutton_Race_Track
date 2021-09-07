@@ -8,6 +8,7 @@
 #import <XCTest/XCTest.h>
 #import "TrackData.hpp"
 #import "TrackEnv.hpp"
+#import "TrackPolicy.hpp"
 #import "TrackFunctions.hpp"
 #import <algorithm>
 #import <vector>
@@ -61,5 +62,17 @@
     XCTAssertTrue(std::find(testAction.begin(), testAction.end(), std::make_tuple(1,-1)) == testAction.end());
 }
 
+- (void)testGenerateBehaveEpisode {
+    int testTrackSize (30);
+    TrackData testTrack {testTrackSize};
+    TrackEnv testEnv {testTrack};
+    TrackPolicy testPolicy;
+    std::vector<state_action_reward> testEpisode {generateBehaveEpisode(testEnv, testPolicy)};
+    // Test the first step
+    state_action_reward first {testEpisode[0]};
+    XCTAssertEqual(0, std::get<0>(std::get<0>(first)));
+    XCTAssertTrue(std::get<0>(std::get<1>(first))>0 || std::get<0>(std::get<1>(first))>0);
+    XCTAssertEqual(-1, std::get<2>(first));
+}
 
 @end

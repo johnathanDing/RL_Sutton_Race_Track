@@ -53,6 +53,7 @@
     allAvailAction = actionSpace(testState_2);
     
     testAcc_2 = testPolicy->getBehavePolicy(testState_2);
+    std::cout << std::get<0>(testAcc_2) << ", " << std::get<1>(testAcc_2) << "\n";
     XCTAssertTrue(std::find(allAvailAction.begin(), allAvailAction.end(), testAcc_2) != allAvailAction.end());
     testAccProb = testPolicy->getBehaveProb(testState_2, testAcc_2);
     XCTAssertEqual(1.0, testAccProb * static_cast<int>(allAvailAction.size()));
@@ -63,15 +64,15 @@
     std::tuple<int, int> testAcc_3, testAcc_4;
     
     testAcc_3 = std::make_tuple(-1, 1);
-    testPolicy->updateStateActionVal(testState_3, testAcc_3, -1, 1);
+    testPolicy->updateStateActionVal(testState_3, testAcc_3, 1, 1);
     XCTAssertEqual(testAcc_3, testPolicy->getTargetPolicy(testState_3));
     
     testAcc_4 = std::make_tuple(0, 1);
-    testPolicy->updateStateActionVal(testState_3, testAcc_4, -1.1, 1);
-    XCTAssertEqual(testAcc_3, testPolicy->getTargetPolicy(testState_3));
-    
-    testPolicy->updateStateActionVal(testState_3, testAcc_3, -1.5, 1);
+    testPolicy->updateStateActionVal(testState_3, testAcc_4, 1.1, 1);
     XCTAssertEqual(testAcc_4, testPolicy->getTargetPolicy(testState_3));
+    
+    testPolicy->updateStateActionVal(testState_3, testAcc_3, 1.5, 1);
+    XCTAssertEqual(testAcc_3, testPolicy->getTargetPolicy(testState_3));
 }
 
 @end

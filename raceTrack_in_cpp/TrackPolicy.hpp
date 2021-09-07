@@ -47,7 +47,7 @@ private:
 public:
     /// Constructor for the TrackPolicy class
     /// @param epsilonInput Initial value for the behavior policy epsilon soft parameter. Default is 1.0, a uniformly random policy.
-    /// @param stateVisitThreshInput How many visits to a state before starting to converge behavior policy
+    /// @param stateVisitThreshInput How many visits to a state before starting to converge behavior policy to target policy
     TrackPolicy(double epsilonInput = 1.0, int stateVisitThreshInput = 100);
     
     /// Updates the state-action (Q-) value according to new observed values. Returns void type.
@@ -61,27 +61,27 @@ public:
     /// Returns the current state-aciton value.
     /// @param carState Car state to be inquired
     /// @param acc Action (Acceleration) to be inquired
-    double getStateActionVal(state_tuple carState, std::tuple<int, int> acc);
+    double getStateActionVal(state_tuple carState, std::tuple<int, int> acc) const;
     
     /// Sets the epsilon soft parameter of the behavior state
     /// @param epsilon Epsilon soft parameter
     void setBehaveEpsilon(double epsilon);
     
     /// Returns the current epsilon soft parameter of the behavior policy
-    double getBehaveEpsilon();
+    double getBehaveEpsilon() const;
     
     /// Returns the action and probability (importance sampling) under behavior policy for a specific state
     /// @param carState Car state to be inquired
-    std::tuple<int, int> getBehavePolicy(state_tuple carState);
+    std::tuple<int, int> getBehavePolicy(state_tuple carState) const;
     
     /// Get the probability of getting such action from behavior policy for importance sampling
     /// @param carState Car state inquired
     /// @param acc Action inquired
-    double getBehaveProb(state_tuple carState, std::tuple<int, int> acc);
+    double getBehaveProb(state_tuple carState, std::tuple<int, int> acc) const;
     
     /// Returns the action under the current target policy for a specific state
     /// @param carState Car state to be inquired
-    std::tuple<int, int> getTargetPolicy(state_tuple carState);
+    std::tuple<int, int> getTargetPolicy(state_tuple carState) const;
     
 private:
     /// Re-calculate and update the target policy

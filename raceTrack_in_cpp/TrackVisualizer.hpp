@@ -10,10 +10,9 @@
 
 #include "TrackData.hpp"
 #include "TrackEnv.hpp"
+#include "TrackFunctions.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
-using tuple_list = std::vector<std::tuple<int, int, int, int>>;
 
 /// Class that creates a window to visualize race track and car movement
 class TrackVisualizer
@@ -33,8 +32,8 @@ public:
     TrackVisualizer(const TrackData& inputTrack);
     
     /// Draws the race track given a car trajectory
-    /// @param carTrajectory A full trajectory (list) of car states
-    void drawRaceTrack(tuple_list carTrajectory);
+    /// @param carEpisode A full trajectory of car episode
+    void drawRaceTrack(std::vector<state_action_reward> carEpisode);
     
 private:
     /// Starts a race track window

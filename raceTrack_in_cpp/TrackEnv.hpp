@@ -45,12 +45,12 @@ public:
     TrackEnv(const TrackData& inputTrack);
     
     /// Returns a random starting state as state (4-) tuple
-    state_tuple getStartState();
+    state_tuple getStartState() const;
     
     /// Given current state and action (acceleration), return the next environment response struct
     /// @param currState Current state tuple
     /// @param acceleration Chosen action
-    envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration);
+    envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration) const;
 };
 
 #endif /* TrackEnv_hpp */

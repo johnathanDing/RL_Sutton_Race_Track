@@ -18,77 +18,65 @@ stateVisitThreshold(stateVisitThreshInput)
 void TrackPolicy::updateStateActionVal(state_tuple carState, std::tuple<int, int> acc,
                                        double newReturn, double newWeight)
 {
-    // If never seen this state
+    // If never seen this state, initialize it
     if (stateActionSpace.find(carState) == stateActionSpace.end()) {
+        // Get all available actions
+        std::vector<std::tuple<int, int>> allAvailableAcc;
+        allAvailableAcc = actionSpace(carState);
         
-        // Add car state and action into the state-action space map
+        // Add car state and all available actions into the state-aciton space map
         stateActionSpace.insert(std::pair<state_tuple, std::vector<std::tuple<int, int>>>
-                                (carState, std::vector<std::tuple<int, int>>{{acc}}));
+                                (carState, allAvailableAcc));
         
         // Add car state and weight into the state-action weight map
-        // Indices corrspond to the state-action space map
+        std::vector<double> weightInit (static_cast<int>(allAvailableAcc.size()), 0.0);
         stateActionWeight.insert(std::pair<state_tuple, std::vector<double>>
-                                 (carState, std::vector<double>{newWeight}));
+                                 (carState, weightInit));
         
         // Add car state and value into the state-action value map
-        // Indices corrspond to the state-action space map
+        std::vector<double> valueInit (static_cast<int>(allAvailableAcc.size()), 0.0);
         stateActionValue.insert(std::pair<state_tuple, std::vector<double>>
-                                (carState, std::vector<double>{newReturn}));
+                                (carState, valueInit));
         
         // Initialize state visit count
-        stateVisitCount.insert(std::pair<state_tuple, int> (carState, 1));
+        stateVisitCount.insert(std::pair<state_tuple, int> (carState, 0));
     }
-    // If car state is already in map
-    else {
-        // Iterator for the action space
-        std::vector<std::tuple<int, int>>::iterator iterAction;
-        // Find the iterator to the action
-        iterAction = std::find(stateActionSpace[carState].begin(),
-                              stateActionSpace[carState].end(), acc);
+    
+    // Iterator for the action space
+    std::vector<std::tuple<int, int>>::iterator iterAction;
+    // Find the iterator to the action
+    iterAction = std::find(stateActionSpace[carState].begin(),
+                          stateActionSpace[carState].end(), acc);
         
-        // If action have not been seen yet
-        if (iterAction == stateActionSpace[carState].end()) {
-            // Append the new action to state-action space map
-            stateActionSpace[carState].push_back(acc);
-            // Add car state and weight into the state-action weight map
-            // Indices corrspond to the state-action space map
-            stateActionWeight[carState].push_back(newWeight);
-            // Add car state and value into the state-action value map
-            // Indices corrspond to the state-action space map
-            stateActionValue[carState].push_back(newReturn);
-        }
-        // If action is already in map
-        else {
-            // Find the index of the inquired action
-            int idxAction = static_cast<int>(std::distance(stateActionSpace[carState].begin(), iterAction));
-            // Update state-aciton weight
-            stateActionWeight[carState][idxAction] += newWeight;
-            // Store the current total weigth for convenience
-            double currWeigth = stateActionWeight[carState][idxAction];
-            // Get the current state-action value for convenience
-            double currVal = stateActionValue[carState][idxAction];
-            // Update state-aciton value
-            stateActionValue[carState][idxAction] += newWeight/currWeigth * (newReturn - currVal);
-        }
+    // Find the index of the inquired action
+    int idxAction = static_cast<int>(std::distance(stateActionSpace[carState].begin(), iterAction));
+    // Update state-aciton weight
+    stateActionWeight[carState][idxAction] += newWeight;
+    // Store the current total weigth for convenience
+    double currWeigth = stateActionWeight[carState][idxAction];
+    // Get the current state-action value for convenience
+    double currVal = stateActionValue[carState][idxAction];
+    // Update state-aciton value
+    stateActionValue[carState][idxAction] += newWeight/currWeigth * (newReturn - currVal);
         
-        // Update state visit count
-        stateVisitCount[carState] += 1;
-    }
+    // Update state visit count
+    stateVisitCount[carState] += 1;
+    
     // Update the target policy after each state-action value update
     updateTargetPolicy(carState);
 };
 
 
-double TrackPolicy::getStateActionVal(state_tuple carState, std::tuple<int, int> acc)
+double TrackPolicy::getStateActionVal(state_tuple carState, std::tuple<int, int> acc) const
 {
     // Iterator for the action space
-    std::vector<std::tuple<int, int>>::iterator iterAction;
+    std::vector<std::tuple<int, int>>::const_iterator iterAction;
     // Find the iterator to the action
-    iterAction = std::find(stateActionSpace[carState].begin(), stateActionSpace[carState].end(), acc);
+    iterAction = std::find(stateActionSpace.at(carState).begin(), stateActionSpace.at(carState).end(), acc);
     // Find the index of the inquired action
-    int idxAction = static_cast<int>(std::distance(stateActionSpace[carState].begin(), iterAction));
+    int idxAction = static_cast<int>(std::distance(stateActionSpace.at(carState).begin(), iterAction));
     // Return state-action value according to the same index
-    return stateActionValue[carState][idxAction];
+    return stateActionValue.at(carState)[idxAction];
 };
 
 
@@ -98,19 +86,19 @@ void TrackPolicy::setBehaveEpsilon(double epsilon)
 };
 
 
-double TrackPolicy::getBehaveEpsilon()
+double TrackPolicy::getBehaveEpsilon() const
 {
     return epsilonSoft;
 };
 
 
-std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState)
+std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState) const
 {
     // System clock Mersenne engine
-    std::mt19937 mersenneEng
+    static std::mt19937 mersenneEng
     {static_cast<std::mt19937::result_type>(std::time(nullptr))};
     // Random 0 to 1 RNG
-    std::uniform_real_distribution<double> behaveRNG {0.0, 1.0};
+    static std::uniform_real_distribution<double> behaveRNG {0.0, 1.0};
     double behaveRandNum = behaveRNG(mersenneEng);
     // A dynamic epsilon:
     double epsilonDynamic;
@@ -125,8 +113,8 @@ std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState)
     // This ensures behaviro policy maximizes exploration when state visit count is low
     // And converges to greedy policy when state visiti count is high
     else {
-        epsilonDynamic = stateVisitCount[carState] <= stateVisitThreshold ?
-        epsilonSoft : epsilonSoft/exp((stateVisitCount[carState] - stateVisitThreshold)/stateVisitThreshold);
+        epsilonDynamic = stateVisitCount.at(carState) <= stateVisitThreshold ?
+        epsilonSoft : epsilonSoft/exp((stateVisitCount.at(carState) - stateVisitThreshold)/stateVisitThreshold);
     }
     
     // With epsilonDynamic probability, choose a random viable action
@@ -145,29 +133,39 @@ std::tuple<int, int> TrackPolicy::getBehavePolicy(state_tuple carState)
 };
 
 
-double TrackPolicy::getBehaveProb(state_tuple carState, std::tuple<int, int> acc)
+double TrackPolicy::getBehaveProb(state_tuple carState, std::tuple<int, int> acc) const
 {
-    // Get the dynamic epsilon from the getBehavePolicy method
-    double epsilonDynamic;
-    epsilonDynamic = stateVisitCount[carState] <= stateVisitThreshold ?
-    epsilonSoft : epsilonSoft/exp((stateVisitCount[carState] - stateVisitThreshold)/stateVisitThreshold);
     // Get all available actions
     std::vector<std::tuple<int, int>> allAvailableAcc;
     allAvailableAcc = actionSpace(carState);
-    // If the action is the greedy action
-    if (acc == getTargetPolicy(carState)) {
-        return 1-epsilonDynamic + epsilonDynamic/static_cast<int>(allAvailableAcc.size());
-    }
-    // Or a random action
-    else {
+    
+    // Get the dynamic epsilon from the getBehavePolicy method
+    double epsilonDynamic;
+    if (stateActionSpace.find(carState) == stateActionSpace.end()) {
+        epsilonDynamic = 1.0;
         return epsilonDynamic/static_cast<int>(allAvailableAcc.size());
+    }
+    else{
+        epsilonDynamic = stateVisitCount.at(carState) <= stateVisitThreshold ?
+        epsilonSoft : epsilonSoft/exp((stateVisitCount.at(carState) - stateVisitThreshold)/stateVisitThreshold);
+        // If the action is the greedy action
+        if (acc == getTargetPolicy(carState)) {
+            return 1-epsilonDynamic + epsilonDynamic/static_cast<int>(allAvailableAcc.size());
+        }
+        // Or a random action
+        else {
+            return epsilonDynamic/static_cast<int>(allAvailableAcc.size());
+        }
     }
 };
 
 
-std::tuple<int, int> TrackPolicy::getTargetPolicy(state_tuple carState)
+std::tuple<int, int> TrackPolicy::getTargetPolicy(state_tuple carState) const
 {
-    return targetPolicy[carState];
+    // Make sure the car state has been seen in state-action space
+    assert((stateActionSpace.find(carState) != stateActionSpace.end()) && "Car state not visited yet.");
+    
+    return targetPolicy.at(carState);
 };
 
 

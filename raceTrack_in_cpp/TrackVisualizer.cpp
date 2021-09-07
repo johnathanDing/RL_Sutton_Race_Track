@@ -13,7 +13,7 @@ trackSize (inputTrack.getTrackSize()),
 raceTrack (inputTrack.getRaceTrack()),
 gridPixel (20.0)
 {
-    std::cout << "Track Visualizer starting..." << "\n";
+    std::cout << "Track Visualizer constructed..." << "\n";
 };
 
 
@@ -71,10 +71,10 @@ void TrackVisualizer::drawCarState(state_tuple carState)
 };
 
 
-void TrackVisualizer::drawRaceTrack(tuple_list carTrajectory)
+void TrackVisualizer::drawRaceTrack(std::vector<state_action_reward> carEpisode)
 {
     // Get the length of the car trajectory
-    int trajLength {static_cast<int>(carTrajectory.size())};
+    int trajLength {static_cast<int>(carEpisode.size())};
     // Starting index
     int i_pos {0};
     // Open the window if it's not already
@@ -112,7 +112,7 @@ void TrackVisualizer::drawRaceTrack(tuple_list carTrajectory)
             // Draw the track grid first
             drawTrackGrid();
             // Then draw the current car state
-            drawCarState(carTrajectory[i_pos]);
+            drawCarState(std::get<0>(carEpisode[i_pos]));
             
             // Push the draw buffer to display
             trackWindow.display();

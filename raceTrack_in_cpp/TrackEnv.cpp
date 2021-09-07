@@ -27,13 +27,13 @@ raceTrack(inputTrack.getRaceTrack())
 };
 
 
-state_tuple TrackEnv::getStartState()
+state_tuple TrackEnv::getStartState() const
 {
     // System clock Mersenne engine
-    std::mt19937 mersenneEng
+    static std::mt19937 mersenneEng
     {static_cast<std::mt19937::result_type>(std::time(nullptr))};
     // A uniform integer RNG to randomly choose a starting position
-    rand_uni_int startLineRNG {0, static_cast<int>(startLine.size())-1};
+    static rand_uni_int startLineRNG {0, static_cast<int>(startLine.size())-1};
     // Get a random starting position
     std::tuple<int, int> startPos {startLine[startLineRNG(mersenneEng)]};
     // Add double zero velocity to the state tuple
@@ -42,7 +42,7 @@ state_tuple TrackEnv::getStartState()
 
 
 envResponse TrackEnv::getEnvResponse
- (state_tuple currState, std::tuple<int, int> acceleration)
+ (state_tuple currState, std::tuple<int, int> acceleration) const
 {
     // Initialize a next response struct
     envResponse nextResp;
@@ -76,7 +76,7 @@ envResponse TrackEnv::getEnvResponse
             nextResp.finished = false;
         }
     }
-    // If the next position is still on tracl
+    // If the next position is still on track
     else {
         // See if the next position is right on the finish line
         if (nextPos_j == trackSize-1) {
@@ -94,7 +94,7 @@ envResponse TrackEnv::getEnvResponse
             // Ideally, this should have been taken care of by the policy.
             assert((nextVelo_i>=0 && nextVelo_j>=0) && "Negative velocity encountered.");
             assert((nextVelo_i<5 && nextVelo_j<5) && "Larger-than-5 velocity encountered.");
-            assert(!(nextVelo_i==0 || nextVelo_j==0)
+            assert(!(nextVelo_i==0 && nextVelo_j==0)
                    && "All zero velocity encountered at non-start line.");
             // If all assertions passed, the next velocity is valid
             nextResp.reward = -1;
