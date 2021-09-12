@@ -67,12 +67,17 @@
     TrackData testTrack {testTrackSize};
     TrackEnv testEnv {testTrack};
     TrackPolicy testPolicy;
-    std::vector<state_action_reward> testEpisode {generateBehaveEpisode(testEnv, testPolicy)};
+    std::vector<state_action_reward_prob> testEpisode {generateBehaveEpisode(testEnv, testPolicy)};
     // Test the first step
-    state_action_reward first {testEpisode[0]};
+    state_action_reward_prob first {testEpisode[0]};
+    // Get the first state
+    std::vector<std::tuple<int, int>> allAvailableAcc;
+    allAvailableAcc = actionSpace(std::get<0>(first));
+    
     XCTAssertEqual(0, std::get<0>(std::get<0>(first)));
-    XCTAssertTrue(std::get<0>(std::get<1>(first))>0 || std::get<0>(std::get<1>(first))>0);
+    XCTAssertTrue(std::get<0>(std::get<1>(first))>0 || std::get<1>(std::get<1>(first))>0);
     XCTAssertEqual(-1, std::get<2>(first));
+    XCTAssertEqual(1.0/static_cast<int>(allAvailableAcc.size()), std::get<3>(first));
 }
 
 @end

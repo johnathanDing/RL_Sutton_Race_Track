@@ -20,25 +20,22 @@
 #include <time.h>
 #include <math.h>
 
-using stateActionSpaceType = std::map<state_tuple, std::vector<std::tuple<int, int>>>;
-using stateActionValueType = std::map<state_tuple, std::vector<double>>;
-using stateVisitCountType = std::map<state_tuple, int>;
-using targetPolicyType = std::map<state_tuple, std::tuple<int, int>>;
+std::vector<std::tuple<int, int>> actionSpace(state_tuple carState);
 
 /// Class that stores state action (Q-) values, makes and modifies target and behavior policies
 class TrackPolicy
 {
 private:
     // Stores the state-action space
-    stateActionSpaceType stateActionSpace;
+    std::map<state_tuple, std::vector<std::tuple<int, int>>> stateActionSpace;
     // Stores the state-action cumulative weight
-    stateActionValueType stateActionWeight;
+    std::map<state_tuple, std::vector<double>> stateActionWeight;
     // Stores the state-action value
-    stateActionValueType stateActionValue;
+    std::map<state_tuple, std::vector<double>> stateActionValue;
     // Stores the state-action count of visits
-    stateVisitCountType stateVisitCount;
+    std::map<state_tuple, int> stateVisitCount;
     // A constantly updating target policy on the go
-    targetPolicyType targetPolicy;
+//    targetPolicyType targetPolicy;
     // Soft parameter for the behavior policy
     double epsilonSoft;
     // Threshold for soft behavior policy to become greedy
@@ -84,9 +81,9 @@ public:
     std::tuple<int, int> getTargetPolicy(state_tuple carState) const;
     
 private:
-    /// Re-calculate and update the target policy
-    /// @param carState Car state to be updated
-    void updateTargetPolicy(state_tuple carState);
+    /// Get a random viable policy based on the car state
+    /// @param carState Car state inquired
+    std::tuple<int, int> getRandomPolicy(state_tuple carState) const;
 };
 
 #endif /* TrackPolicy_hpp */

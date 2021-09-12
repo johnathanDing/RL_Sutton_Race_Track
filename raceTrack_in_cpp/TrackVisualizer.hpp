@@ -33,7 +33,7 @@ public:
     
     /// Draws the race track given a car trajectory
     /// @param carEpisode A full trajectory of car episode
-    void drawRaceTrack(std::vector<state_action_reward> carEpisode);
+    void drawRaceTrack(std::vector<state_action_reward_prob> carEpisode);
     
 private:
     /// Starts a race track window

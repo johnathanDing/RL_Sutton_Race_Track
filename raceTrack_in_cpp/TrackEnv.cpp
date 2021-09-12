@@ -33,9 +33,9 @@ state_tuple TrackEnv::getStartState() const
     static std::mt19937 mersenneEng
     {static_cast<std::mt19937::result_type>(std::time(nullptr))};
     // A uniform integer RNG to randomly choose a starting position
-    static rand_uni_int startLineRNG {0, static_cast<int>(startLine.size())-1};
+    static rand_uni_int startLineRNG (0, static_cast<int>(startLine.size())-1);
     // Get a random starting position
-    std::tuple<int, int> startPos {startLine[startLineRNG(mersenneEng)]};
+    std::tuple<int, int> startPos (startLine[startLineRNG(mersenneEng)]);
     // Add double zero velocity to the state tuple
     return std::make_tuple(std::get<0>(startPos), std::get<1>(startPos), 0, 0);
 };

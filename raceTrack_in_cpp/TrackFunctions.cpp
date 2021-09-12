@@ -53,49 +53,51 @@ std::vector<std::tuple<int, int>> actionSpace(state_tuple carState)
 };
 
 
-std::vector<state_action_reward> generateBehaveEpisode(const TrackEnv& inputTrackEnv, const TrackPolicy& inputTrackPolicy)
+std::vector<state_action_reward_prob> generateBehaveEpisode(const TrackEnv& inputTrackEnv, const TrackPolicy& inputTrackPolicy)
 {
     // Initialize a full episode
-    std::vector<state_action_reward> episode;
+    std::vector<state_action_reward_prob> episode;
     // Get the starting state, action, and next response
-    state_tuple currState {inputTrackEnv.getStartState()};
-    std::tuple<int, int> currAction {inputTrackPolicy.getBehavePolicy(currState)};
-    envResponse currNext {inputTrackEnv.getEnvResponse(currState, currAction)};
+    state_tuple currState (inputTrackEnv.getStartState());
+    std::tuple<int, int> currAction (inputTrackPolicy.getBehavePolicy(currState));
+    double currProb (inputTrackPolicy.getBehaveProb(currState, currAction));
+    envResponse currNext = inputTrackEnv.getEnvResponse(currState, currAction);
     // As long as episode is not finished (finish line not crossed) yet
     while (!currNext.finished) {
         // Add current state-action pair into episode
-        episode.push_back(std::make_tuple(currState, currAction, currNext.reward));
-        // Get next state-action pair
+        episode.push_back(std::make_tuple(currState, currAction, currNext.reward, currProb));
+        // Get next state-action pair and probability
         currState = currNext.nextState;
         currAction = inputTrackPolicy.getBehavePolicy(currState);
+        currProb = inputTrackPolicy.getBehaveProb(currState, currAction);
         // Calculate next environment response
         currNext = inputTrackEnv.getEnvResponse(currState, currAction);
     }
-    episode.push_back(std::make_tuple(currState, currAction, currNext.reward));
+    episode.push_back(std::make_tuple(currState, currAction, currNext.reward, currProb));
     
     return episode;
 }
 
 
-std::vector<state_action_reward> generateTargetEpisode(const TrackEnv& inputTrackEnv, const TrackPolicy& inputTrackPolicy)
+std::vector<state_action_reward_prob> generateTargetEpisode(const TrackEnv& inputTrackEnv, const TrackPolicy& inputTrackPolicy)
 {
     // Initialize a full episode
-    std::vector<state_action_reward> episode;
+    std::vector<state_action_reward_prob> episode;
     // Get the starting state, action, and next response
-    state_tuple currState {inputTrackEnv.getStartState()};
-    std::tuple<int, int> currAction {inputTrackPolicy.getTargetPolicy(currState)};
-    envResponse currNext {inputTrackEnv.getEnvResponse(currState, currAction)};
+    state_tuple currState (inputTrackEnv.getStartState());
+    std::tuple<int, int> currAction (inputTrackPolicy.getTargetPolicy(currState));
+    envResponse currNext = inputTrackEnv.getEnvResponse(currState, currAction);
     // As long as episode is not finished (finish line not crossed) yet
     while (!currNext.finished) {
         // Add current state-action pair into episode
-        episode.push_back(std::make_tuple(currState, currAction, currNext.reward));
+        episode.push_back(std::make_tuple(currState, currAction, currNext.reward, 1.0));
         // Get next state-action pair
         currState = currNext.nextState;
         currAction = inputTrackPolicy.getTargetPolicy(currState);
         // Calculate next environment response
         currNext = inputTrackEnv.getEnvResponse(currState, currAction);
     }
-    episode.push_back(std::make_tuple(currState, currAction, currNext.reward));
+    episode.push_back(std::make_tuple(currState, currAction, currNext.reward, 1.0));
     
     return episode;
 }

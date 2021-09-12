@@ -71,7 +71,7 @@ void TrackVisualizer::drawCarState(state_tuple carState)
 };
 
 
-void TrackVisualizer::drawRaceTrack(std::vector<state_action_reward> carEpisode)
+void TrackVisualizer::drawRaceTrack(std::vector<state_action_reward_prob> carEpisode)
 {
     // Get the length of the car trajectory
     int trajLength {static_cast<int>(carEpisode.size())};
