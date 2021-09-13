@@ -10,6 +10,7 @@
 #include "TrackEnv.hpp"
 #include "TrackFunctions.hpp"
 #include <iostream>
+#include <fstream>
 #include <thread>
 #include <time.h>
 
@@ -47,6 +48,15 @@ int main() {
     
     // Start MC training
     std::cout << "Starting Monte-Carlo training..." << "\n";
+    // Open a file to record training data
+    std::ofstream episodeFile ("Episode_File.txt");
+    if (!episodeFile) {
+        // If somehow the file cannot be opened
+        std::cerr << "Episode recording file failed to open!" << "\n";
+        return 1;
+    }
+    episodeFile << "# Per thousand episode average Return:" << "\n";
+    episodeFile << "# No. of thousand episodes | Average Return" << "\n";
     // Start timer
     clock_t startTime (clock());
     
@@ -59,6 +69,7 @@ int main() {
         // Check episode size once in a while
         if (episodeNum%1000 == 0) {
             std::cout << "The " << episodeNum/1000 << " th 1000 episode average length is " << episodeLengthAve << "\n";
+            episodeFile << episodeNum/1000 << " " << -1*episodeLengthAve << "\n";
             episodeLengthAve = 0;
         }
         // Reset the discounted return
@@ -98,6 +109,8 @@ int main() {
     }
     
     std::cout << "Off-policy Monte-Carlo control finished with " << episodeNum-1 << " episodes." << "\n";
+    // Close recording file
+    episodeFile.close();
     // Print total training time
     clock_t trainingTime (clock() - startTime);
     std::cout << "Total training time is: " << static_cast<double>(trainingTime)/CLOCKS_PER_SEC/3600 << " hrs." << "\n";
