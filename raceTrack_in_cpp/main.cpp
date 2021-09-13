@@ -11,7 +11,7 @@
 #include "TrackFunctions.hpp"
 #include <iostream>
 #include <thread>
-#include <chrono>
+#include <time.h>
 
 int main() {
     
@@ -27,8 +27,9 @@ int main() {
     TrackVisualizer raceVisualizer (raceTrack);
     // Initialize the episode vector, storing all state-actions in a single episode
     std::vector<state_action_reward_prob> episode;
-    // Record the number of episodes
+    // Record the number of episodes of average episode length
     int episodeNum (0);
+    int episodeLengthAve (0);
     // Record how many steps learnt
     int stepsLearnt (0);
     int maxStepsLearnt (0);
@@ -46,15 +47,19 @@ int main() {
     
     // Start MC training
     std::cout << "Starting Monte-Carlo training..." << "\n";
+    // Start timer
+    clock_t startTime (clock());
     
-    while (fullEpisodeCount < 100) {
+    while (fullEpisodeCount < 1000) {
         // Generate a behavior episode
         episode = generateBehaveEpisode(raceEnv, racePolicy);
         ++ episodeNum;
+        episodeLengthAve += (static_cast<int>(episode.size())-episodeLengthAve)/((episodeNum-1)%1000+1);
         stepsLearnt = 0;
         // Check episode size once in a while
-        if (episodeNum%1000 == 1) {
-            std::cout << "The " << episodeNum << " th episode's length is " << episode.size() << "\n";
+        if (episodeNum%1000 == 0) {
+            std::cout << "The " << episodeNum/1000 << " th 1000 episode average length is " << episodeLengthAve << "\n";
+            episodeLengthAve = 0;
         }
         // Reset the discounted return
         double G (0.0);
@@ -82,7 +87,7 @@ int main() {
                 minRow = std::min(minRow, std::get<0>(std::get<0>(step)));
                 minCol = std::min(minCol, std::get<1>(std::get<0>(step)));
                 maxStepsLearnt = std::max(maxStepsLearnt, stepsLearnt);
-                if (episodeNum%1000 == 1) {
+                if (episodeNum%1000 == 0) {
                     std::cout << minRow << ", " << minCol << ", " << maxStepsLearnt << "\n";
                 }
                 break;
@@ -93,6 +98,9 @@ int main() {
     }
     
     std::cout << "Off-policy Monte-Carlo control finished with " << episodeNum-1 << " episodes." << "\n";
+    // Print total training time
+    clock_t trainingTime (clock() - startTime);
+    std::cout << "Total training time is: " << static_cast<double>(trainingTime)/CLOCKS_PER_SEC/3600 << " hrs." << "\n";
     
     int testNum (0);
     // Look at 100 samples of target policy
