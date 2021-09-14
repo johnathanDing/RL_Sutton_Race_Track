@@ -38,6 +38,8 @@ or the following:
 
 The race track is generated through a dedicated class, TrackData:
 ```cpp
+using vector_2D = std::vector<std::vector<int>>;
+
 /// Class that generates and stores race track
 class TrackData
 {
