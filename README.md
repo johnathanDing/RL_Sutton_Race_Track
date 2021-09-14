@@ -19,10 +19,18 @@ Apply a Monte Carlo control method to this task to compute the optimal policy fr
 ## Solution Overview:
 The problem mimics a over-simplified model of an autonomous race car driving on race track. Since there's no straightforward analytical model of the entire race track environment (the number of combinations of states can be astronimical), the use of Monte Carlo control seems a good option.
 
+We choose to use Off-Policy Monte Carlo control for this problem. The reason we do so is that we prefer a deterministic (greedy) target policy after training (General Policy Iterations), since we're driving a race car and wouldn't want much randomness in our policy. Off-Policy control enables us to do that through using a different, behaivor policy during the GPI training process. 
 
+The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. We'll encounter both of these advantage and disadvantage during our solution process.
+
+### Essential Modules
+We start tackling our problem by first preparing all the modules essential to our Monte Carlo reinforcement learning problem: the environment (race track and response), the state-action space and policies, Monte Carlo episode generators, and the visualizer of the race track.
+
+#### The race track environment
 
 A sample visualization of a race track can be as following:
 ![raceTrack example](./Examples/RaceTrack_example_1.png)
+
 or the following:
 ![raceTrack example](./Examples/RaceTrack_example_2.png)
 
