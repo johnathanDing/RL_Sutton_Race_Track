@@ -56,7 +56,7 @@ int main() {
         return 1;
     }
     episodeFile << "# Per thousand episode average Return:" << "\n";
-    episodeFile << "# No. of thousand episodes | Average Return" << "\n";
+    episodeFile << "# No. of thousand episodes | Average Return" << std::endl;
     // Start timer
     clock_t startTime (clock());
     
@@ -69,7 +69,7 @@ int main() {
         // Check episode size once in a while
         if (episodeNum%1000 == 0) {
             std::cout << "The " << episodeNum/1000 << " th 1000 episode average length is " << episodeLengthAve << "\n";
-            episodeFile << episodeNum/1000 << " " << -1*episodeLengthAve << "\n";
+            episodeFile << episodeNum/1000 << " " << -1*episodeLengthAve << std::endl;
             episodeLengthAve = 0;
         }
         // Reset the discounted return
