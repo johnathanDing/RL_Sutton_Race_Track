@@ -65,8 +65,15 @@ envResponse TrackEnv::getEnvResponse
          && std::max(currPos_i, nextPos_i) >= std::get<0>(finishLine[0]))
         {
             nextResp.reward = -1;
-            // Next position hard to represent here. Just jump to a random start
-            nextResp.nextState = getStartState();
+            // Choose the first overlapping row between the step and finish line as the finished state
+            int finishRow;
+            for (int i_row=std::min(currPos_i, nextPos_i); i_row<=std::max(currPos_i, nextPos_i); ++i_row) {
+                if (i_row >= std::get<0>(finishLine[0])) {
+                    finishRow = i_row;
+                    break;
+                }
+            }
+            nextResp.nextState = std::make_tuple(finishRow, trackSize-1, 0, 0);
             nextResp.finished = true;
         }
         // Or just plain out of track. Restart

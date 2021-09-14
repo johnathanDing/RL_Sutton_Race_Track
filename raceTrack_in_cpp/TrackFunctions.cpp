@@ -98,6 +98,7 @@ std::vector<state_action_reward_prob> generateTargetEpisode(const TrackEnv& inpu
         currNext = inputTrackEnv.getEnvResponse(currState, currAction);
     }
     episode.push_back(std::make_tuple(currState, currAction, currNext.reward, 1.0));
+    episode.push_back(std::make_tuple(currNext.nextState, std::make_tuple(0,0), 0, 1.0));
     
     return episode;
 }

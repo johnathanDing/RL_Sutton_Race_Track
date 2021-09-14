@@ -49,10 +49,10 @@ int main() {
     // Start MC training
     std::cout << "Starting Monte-Carlo training..." << "\n";
     // Open a file to record training data
-    std::ofstream episodeFile ("Episode_File.txt");
+    std::ofstream episodeFile ("Episode_Training.txt");
     if (!episodeFile) {
         // If somehow the file cannot be opened
-        std::cerr << "Episode recording file failed to open!" << "\n";
+        std::cerr << "Episode training file failed to open!" << "\n";
         return 1;
     }
     episodeFile << "# Per thousand episode average Return:" << "\n";
@@ -116,17 +116,32 @@ int main() {
     std::cout << "Total training time is: " << static_cast<double>(trainingTime)/CLOCKS_PER_SEC/3600 << " hrs." << "\n";
     
     int testNum (0);
-    // Look at 100 samples of target policy
-    while (testNum < 10) {
+    // Look at 100 samples of target policy, and record returns/episode length
+    episodeFile.open("Episode_Testing.txt");
+    if (!episodeFile) {
+        // If somehow the file cannot be opened
+        std::cerr << "Episode testing file failed to open!" << "\n";
+        return 1;
+    }
+    episodeFile << "# Target episode returns." << "\n";
+    episodeFile << "# Episode No. | Returns" << std::endl;
+    // Store the target episodes
+    std::vector<std::vector<state_action_reward_prob>> episodeTarget;
+    while (testNum < 100) {
         // Generate episodes following target policy and visualize
         episode = generateTargetEpisode(raceEnv, racePolicy);
-        std::cout << "Episode has " << episode.size() << " steps." << "\n";
-        raceVisualizer.drawRaceTrack(episode);
-        
+        episodeTarget.push_back(episode);
+        std::cout << "The " << testNum+1 << " th target episode has " << episode.size() << " steps." << "\n";
+        episodeFile << testNum+1 << " " << -1*static_cast<int>(episode.size()) << std::endl;
         //Increment counter
         ++ testNum;
     }
+    episodeFile.close();
     
+    // Visualize the all of them
+    for (std::vector<state_action_reward_prob> episodeTest : episodeTarget) {
+        raceVisualizer.drawRaceTrack(episodeTest);
+    }
     
     return 0;
 }
