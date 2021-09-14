@@ -44,18 +44,14 @@ private:
     const int trackSize;
     // 2D vector of race track
     vector_2D raceTrack;
-    
 public:
     /// TrackData class constructor
     /// @param trackSizeInput How many squares do you want the race track edge to be? Default is 30.
     TrackData(int trackSizeInput = 30);
-    
     /// Returns track edge size
     int getTrackSize() const;
-    
     /// Returns race track as a 2D vector constant reference
     const vector_2D& getRaceTrack() const;
-    
 private:
     /// Generate the race track according to author-defined rules
     void generateRaceTrack();
