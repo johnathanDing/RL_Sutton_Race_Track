@@ -30,11 +30,7 @@ We start tackling our problem by first preparing all the modules essential to ou
 We study square race tracks without loosing generality. A race track has its starting line on the bottom of the square board, gradually steers towards right with some random walk, and ends on the finish line on the right boarder of the square board.
 
 Sample visualizations of some viable race tracks can be as following:
-![raceTrack example](./Examples/RaceTrack_example_1.png)
-
-or the following:
-
-![raceTrack example](./Examples/RaceTrack_example_2.png)
+![raceTrack example](./Examples/RaceTrack_Examples.png)
 
 The race track is generated through a dedicated class, TrackData:
 ```cpp
