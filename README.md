@@ -23,15 +23,16 @@ We choose to use Off-Policy Monte Carlo control for this problem. The reason we 
 
 The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. We'll encounter both of these advantage and disadvantage during our solution process.
 
-### Essential Modules
+## Essential Modules
 We start tackling our problem by first preparing all the modules essential to our Monte Carlo reinforcement learning problem: the environment (race track and response), the state-action space and policies, Monte Carlo episode generators, and the visualizer of the race track.
 
-#### The race track environment
+### The race track environment
 
 A sample visualization of a race track can be as following:
 ![raceTrack example](./Examples/RaceTrack_example_1.png)
 
 or the following:
+
 ![raceTrack example](./Examples/RaceTrack_example_2.png)
 
 
