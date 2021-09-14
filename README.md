@@ -27,12 +27,41 @@ The advantage of Off-Policy control is that behavior policy, which could even ch
 We start tackling our problem by first preparing all the modules essential to our Monte Carlo reinforcement learning problem: the environment (race track and response), the state-action space and policies, Monte Carlo episode generators, and the visualizer of the race track.
 
 ### The race track environment
+We study square race tracks without loosing generality. A race track has its starting line on the bottom of the square board, gradually steers towards right with some random walk, and ends on the finish line on the right boarder of the square board.
 
-A sample visualization of a race track can be as following:
+Sample visualizations of some viable race tracks can be as following:
 ![raceTrack example](./Examples/RaceTrack_example_1.png)
 
 or the following:
 
 ![raceTrack example](./Examples/RaceTrack_example_2.png)
+
+The race track is generated through a dedicated class, TrackData:
+```cpp
+/// Class that generates and stores race track
+class TrackData
+{
+private:
+    // Edge length of square-shaped race track
+    const int trackSize;
+    // 2D vector of race track
+    vector_2D raceTrack;
+    
+public:
+    /// TrackData class constructor
+    /// @param trackSizeInput How many squares do you want the race track edge to be? Default is 30.
+    TrackData(int trackSizeInput = 30);
+    
+    /// Returns track edge size
+    int getTrackSize() const;
+    
+    /// Returns race track as a 2D vector constant reference
+    const vector_2D& getRaceTrack() const;
+    
+private:
+    /// Generate the race track according to author-defined rules
+    void generateRaceTrack();
+};
+```
 
 

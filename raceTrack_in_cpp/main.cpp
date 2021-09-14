@@ -116,7 +116,7 @@ int main() {
     std::cout << "Total training time is: " << static_cast<double>(trainingTime)/CLOCKS_PER_SEC/3600 << " hrs." << "\n";
     
     int testNum (0);
-    // Look at 100 samples of target policy, and record returns/episode length
+    // Look at 1000 samples of target policy, and record returns/episode length
     episodeFile.open("Episode_Testing.txt");
     if (!episodeFile) {
         // If somehow the file cannot be opened
@@ -127,7 +127,7 @@ int main() {
     episodeFile << "# Episode No. | Returns" << std::endl;
     // Store the target episodes
     std::vector<std::vector<state_action_reward_prob>> episodeTarget;
-    while (testNum < 100) {
+    while (testNum < 1000) {
         // Generate episodes following target policy and visualize
         episode = generateTargetEpisode(raceEnv, racePolicy);
         episodeTarget.push_back(episode);
@@ -138,9 +138,9 @@ int main() {
     }
     episodeFile.close();
     
-    // Visualize the all of them
-    for (std::vector<state_action_reward_prob> episodeTest : episodeTarget) {
-        raceVisualizer.drawRaceTrack(episodeTest);
+    // Visualize the first 100 of them
+    for (int i_epi (0); i_epi<100; ++i_epi) {
+        raceVisualizer.drawRaceTrack(episodeTarget[i_epi]);
     }
     
     return 0;
