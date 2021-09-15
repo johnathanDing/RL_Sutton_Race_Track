@@ -217,8 +217,11 @@ public:
 ## Off-Policy Monte Carlo control
 ![Off-policy MC algorithm](./Examples/Off_Policy_MC_Control.png)
 
-Our main function implements the Off-Policy MC control algorithm, as outlined above from Sutton's book. We also record the number of training episodes and their total returns for result analysis purpose. One example set of results is as following:
+Our main function implements the Off-Policy MC control algorithm, as outlined above from Sutton's book. We also record the number of training episodes and their total returns for result analysis purpose. At the end, 1k episodes generated through target policy is evaluated to analyze the quality of our training model. 
+
+One example set of results is as following:
 
 ![Example2](./Examples/OneEpisodeRecording_2.gif)
 ![Example2Result](./Examples/Example2_Results.png)
 
+### Result discussion
