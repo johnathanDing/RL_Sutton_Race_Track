@@ -217,7 +217,11 @@ public:
 ## Off-Policy Monte Carlo control
 ![Off-policy MC algorithm](./Examples/Off_Policy_MC_Control.png)
 
-Our main function implements the Off-Policy MC control algorithm, as outlined above from Sutton's book. We also record the number of training episodes and their total returns for result analysis purpose. At the end, 1k episodes generated through target policy is evaluated to analyze the quality of our training model. 
+Our main function implements the Off-Policy MC control algorithm, as outlined above from Sutton's book. In our training model, we customize the behavior policy such that it returns random policy if the state if incompletely trained, and transitions to a epsilon-soft version of the target policy once all state-available actions have been visited at least once. 
+
+Such strategy has two advantages: 1) it can ensure that we explore all available options before committing to a seemingly optimal action; and 2) it can help training move deeper into episodes after tail steps are sufficiently trained. Because once there's a rough estimate of all actions, we transition to a low-epsilon soft policy to speed up the training process, avoiding stalling too much training time on frequently visited states. 
+
+We also record the number of training episodes and their total returns for result analysis purpose. At the end, 1k episodes generated through target policy is evaluated to analyze the quality of our training model. 
 
 One example set of results is as following:
 
@@ -227,3 +231,12 @@ One example set of results is as following:
 </p>
 
 ### Result discussion
+From the behavior training result, it is evident that the training process started from tail steps, quickly converged to optimal actions for those few tail states, thus drastically reducing the average episode returns. As the training moved deeper into each episode, the improvement rate slows down, due to the quickly branching variations of episodes. Even after 8 million behavior episdoes, which took 1 hr on our Macbook, the training was still improving and not yet plateaued.
+
+Based on the 1k target episode histogram, we can also observe that the distribution heavily was tilting towards high returns (> -30), proving that our Off-Policy MC control trained the autonomous race car as expected. However, not all target episodes perform better than behaviro episodes, due to incompletely trained starting and intermediate states that leads to random actions, according to our previous discussion. Nontheless, the average -183 episode return is a far better performance compared to the < -200 episode return at the end of behavior policy training. 
+
+## Conclusion
+In conclusion, our implemented Off-Policy Monte Carlo control method successfully trained the autonomous race car driver given a race track. The training process show expected return improvement over time, albeit not yet reaching the full convergence. The target episodes show dominantly superior performance compared to exploratory behavior episodes, although the incomplete training still leads to outlier behaviors with low returns.
+
+## Future Improvements
+
