@@ -154,7 +154,7 @@ public:
     double getBehaveProb(state_tuple carState, std::tuple<int, int> acc) const;
 ```
 
-_**One important caveat **_ lies in the target policy. Since the soft behavior policy-generated training episode variations is astronimical, and our model mostly learns from the tails of episodes, not all states can be visited given a reasonable training time, especially for states close to the starting line.
+_**One important caveat**_ lies in the target policy. Since the soft behavior policy-generated training episode variations is astronimical, and our model mostly learns from the tails of episodes, not all states can be visited given a reasonable training time, especially for states close to the starting line.
 
 Under such situation, if target policy deterministically returns an action based on initial values or incomplete state-action values, an episode generated using target policy can often result in extremely long episodes (close to infinite loops), which is far from what we'd like to see.
 
