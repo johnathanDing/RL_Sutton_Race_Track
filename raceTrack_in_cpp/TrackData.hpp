@@ -11,6 +11,8 @@
 //#include <stdio.h>
 #include <vector>
 #include <random>
+#include <time.h>
+#include <iostream>
 
 using rand_uni_int = std::uniform_int_distribution<>;
 using rand_choices = std::discrete_distribution<>;
@@ -26,15 +28,18 @@ private:
     vector_2D raceTrack;
     
 public:
-    // Constructor. Edge size of 30 is a good default value
+    /// TrackData class constructor
+    /// @param trackSizeInput How many squares do you want the race track edge to be? Default is 30.
     TrackData(int trackSizeInput = 30);
-    // To give public access to track size
+    
+    /// Returns track edge size
     int getTrackSize() const;
-    // To give public access to a const reference of race track
+    
+    /// Returns race track as a 2D vector constant reference
     const vector_2D& getRaceTrack() const;
     
 private:
-    // Generates race track given track size
+    /// Generate the race track according to author-defined rules
     void generateRaceTrack();
 };
 

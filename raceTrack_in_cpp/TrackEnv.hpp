@@ -40,12 +40,17 @@ private:
     std::vector<std::tuple<int, int>> finishLine;
     
 public:
-    // Constuctor based on input TrackData
+    /// Construct track parameters based on input TrackData
+    /// @param inputTrack Input TrackData class instance
     TrackEnv(const TrackData& inputTrack);
-    // Get a starting state
-    state_tuple getStartState();
-    // Get response from environment the response struct, based on current state and acceleration
-    envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration);
+    
+    /// Returns a random starting state as state (4-) tuple
+    state_tuple getStartState() const;
+    
+    /// Given current state and action (acceleration), return the next environment response struct
+    /// @param currState Current state tuple
+    /// @param acceleration Chosen action
+    envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration) const;
 };
 
 #endif /* TrackEnv_hpp */

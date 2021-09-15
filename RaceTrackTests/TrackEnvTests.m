@@ -96,9 +96,9 @@
     // Step reward is always -1
     XCTAssertEqual(-1, testNextState.reward);
     // Finish line crossed. Should be reset to random start state
-    XCTAssertEqual(0, std::get<0>(testNextState.nextState));
-    XCTAssertTrue((std::get<1>(testNextState.nextState)>=std::get<1>(startLine[0])));
-    XCTAssertTrue((std::get<1>(testNextState.nextState)<=std::get<1>(startLine.back())));
+    XCTAssertEqual(testTrackSize-1, std::get<1>(testNextState.nextState));
+    XCTAssertTrue((std::get<0>(testNextState.nextState)>=std::get<0>(finishLine[0])));
+    XCTAssertTrue((std::get<0>(testNextState.nextState)<=std::get<0>(finishLine.back())));
     // Finish line crossed. Velocity should be reset
     XCTAssertEqual(0, std::get<2>(testNextState.nextState));
     XCTAssertEqual(0, std::get<3>(testNextState.nextState));

@@ -6,14 +6,8 @@
 //
 
 #include "TrackData.hpp"
-#include <time.h>
-#include <iostream>
-//#include <vector>
-//#include <random>
 
 
-/// TrackData class constructor
-/// @param trackSizeInput How many squares do you want the race track edge to be? Default is 30.
 TrackData::TrackData(int trackSizeInput) :
     trackSize{trackSizeInput},
     raceTrack(trackSizeInput, std::vector<int>(trackSizeInput, 0))
@@ -23,19 +17,18 @@ TrackData::TrackData(int trackSizeInput) :
 };
     
 
-/// Returns track edge size
 int TrackData::getTrackSize() const
 {
     return trackSize;
 };
 
-/// Returns race track as a 2D vector constant reference
+
 const vector_2D& TrackData::getRaceTrack() const
 {
     return raceTrack;
 };
 
-/// Generate the race track according to author-defined rules
+
 void TrackData::generateRaceTrack()
 {
     // Define the min/max starting line width

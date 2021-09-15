@@ -10,10 +10,9 @@
 
 #include "TrackData.hpp"
 #include "TrackEnv.hpp"
+#include "TrackFunctions.hpp"
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
-using tuple_list = std::vector<std::tuple<int, int, int, int>>;
 
 /// Class that creates a window to visualize race track and car movement
 class TrackVisualizer
@@ -28,17 +27,23 @@ private:
     float gridPixel;
     
 public:
-    // Constructor takes in race track info from TrackData
+    /// TrackVisualizer constructor
+    /// @param inputTrack Input TrackData class instance.
     TrackVisualizer(const TrackData& inputTrack);
-    // Public method for drawing race track given car state array
-    void drawRaceTrack(tuple_list carTrajectory);
+    
+    /// Draws the race track given a car trajectory
+    /// @param carEpisode A full trajectory of car episode
+    void drawRaceTrack(std::vector<state_action_reward_prob> carEpisode);
     
 private:
-    // Open a window
+    /// Starts a race track window
     void startWindow();
-    // Draw race track grid on an open window
+    
+    /// Draw race track grid to window
     void drawTrackGrid();
-    // Draw car position on grid
+    
+    /// Draws the current position of car
+    /// @param carState tuple representing the current state of car
     void drawCarState(state_tuple carState);
 };
 

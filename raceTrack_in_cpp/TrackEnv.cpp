@@ -7,8 +7,7 @@
 
 #include "TrackEnv.hpp"
 
-/// Construct track parameters based on input TrackData
-/// @param inputTrack Input TrackData class instance
+
 TrackEnv::TrackEnv(const TrackData& inputTrack):
 trackSize(inputTrack.getTrackSize()),
 raceTrack(inputTrack.getRaceTrack())
@@ -27,25 +26,23 @@ raceTrack(inputTrack.getRaceTrack())
     }
 };
 
-/// Returns a random starting state as state (4-) tuple
-state_tuple TrackEnv::getStartState()
+
+state_tuple TrackEnv::getStartState() const
 {
     // System clock Mersenne engine
-    std::mt19937 mersenneEng
+    static std::mt19937 mersenneEng
     {static_cast<std::mt19937::result_type>(std::time(nullptr))};
     // A uniform integer RNG to randomly choose a starting position
-    rand_uni_int startLineRNG {0, static_cast<int>(startLine.size())-1};
+    static rand_uni_int startLineRNG (0, static_cast<int>(startLine.size())-1);
     // Get a random starting position
-    std::tuple<int, int> startPos {startLine[startLineRNG(mersenneEng)]};
+    std::tuple<int, int> startPos (startLine[startLineRNG(mersenneEng)]);
     // Add double zero velocity to the state tuple
     return std::make_tuple(std::get<0>(startPos), std::get<1>(startPos), 0, 0);
 };
 
-/// Given current state and action (acceleration), return the next environment response struct
-/// @param currState Current state tuple
-/// @param acceleration Chosen action
+
 envResponse TrackEnv::getEnvResponse
- (state_tuple currState, std::tuple<int, int> acceleration)
+ (state_tuple currState, std::tuple<int, int> acceleration) const
 {
     // Initialize a next response struct
     envResponse nextResp;
@@ -68,8 +65,15 @@ envResponse TrackEnv::getEnvResponse
          && std::max(currPos_i, nextPos_i) >= std::get<0>(finishLine[0]))
         {
             nextResp.reward = -1;
-            // Next position hard to represent here. Just jump to a random start
-            nextResp.nextState = getStartState();
+            // Choose the first overlapping row between the step and finish line as the finished state
+            int finishRow;
+            for (int i_row=std::min(currPos_i, nextPos_i); i_row<=std::max(currPos_i, nextPos_i); ++i_row) {
+                if (i_row >= std::get<0>(finishLine[0])) {
+                    finishRow = i_row;
+                    break;
+                }
+            }
+            nextResp.nextState = std::make_tuple(finishRow, trackSize-1, 0, 0);
             nextResp.finished = true;
         }
         // Or just plain out of track. Restart
@@ -79,7 +83,7 @@ envResponse TrackEnv::getEnvResponse
             nextResp.finished = false;
         }
     }
-    // If the next position is still on tracl
+    // If the next position is still on track
     else {
         // See if the next position is right on the finish line
         if (nextPos_j == trackSize-1) {
@@ -97,7 +101,7 @@ envResponse TrackEnv::getEnvResponse
             // Ideally, this should have been taken care of by the policy.
             assert((nextVelo_i>=0 && nextVelo_j>=0) && "Negative velocity encountered.");
             assert((nextVelo_i<5 && nextVelo_j<5) && "Larger-than-5 velocity encountered.");
-            assert(!(nextVelo_i==0 || nextVelo_j==0)
+            assert(!(nextVelo_i==0 && nextVelo_j==0)
                    && "All zero velocity encountered at non-start line.");
             // If all assertions passed, the next velocity is valid
             nextResp.reward = -1;
