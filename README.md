@@ -21,7 +21,7 @@ The problem mimics a over-simplified model of an autonomous race car driving on 
 
 We choose to use Off-Policy Monte Carlo control for this problem. The reason we do so is that we prefer a deterministic (greedy) target policy after training (General Policy Iterations), since we're driving a race car and wouldn't want much randomness in our policy. Off-Policy control enables us to do that through using a different, behaivor policy during the GPI training process. 
 
-The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. 
+The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. The consequence is that our model will mostly learn from the tails of training episodes.
 
 We'll encounter both of these advantage and disadvantage during our solution process.
 
@@ -101,8 +101,6 @@ public:
 ### The racing policy
 The policy class, TrackPolicy, is the core module of our reinforcement learning story. It records all state-action pairs visited, their current state-action value, importance-sampling weight. It then derives the behavior and target control policies from these data. 
 
-Since Off-Policy controls can have great degree of freedom in customizing the behaivor policy, our policy module also records state visit counts, setter and getter of epsilon-soft parameter, etc... to enable versatile customization of the behavior policy as long as state-action coverage is ensured.
-
 ```cpp
 std::vector<std::tuple<int, int>> actionSpace(state_tuple carState);
 
@@ -122,6 +120,11 @@ private:
     double epsilonSoft;
     // Threshold for soft behavior policy to become greedy
     int stateVisitThreshold;
+```
+
+Since Off-Policy controls can have great degree of freedom in customizing the behaivor policy, our policy module also records state visit counts, setter and getter of epsilon-soft parameter, etc... to enable versatile customization of the behavior policy as long as state-action coverage is ensured.
+
+```cpp
 public:
     /// Constructor for the TrackPolicy class
     /// @param epsilonInput Initial value for the behavior policy epsilon soft parameter. Default is 1.0, a uniformly random policy.
@@ -149,6 +152,16 @@ public:
     /// @param carState Car state inquired
     /// @param acc Action inquired
     double getBehaveProb(state_tuple carState, std::tuple<int, int> acc) const;
+```
+
+One important caveat lies in the target policy. Since the soft behavior policy-generated training episode variations is astronimical, and our model mostly learns from the tails of episodes, not all states can be visited given a reasonable training time, especially for states close to the starting line.
+
+Under such situation, if target policy deterministically returns an action based on initial values or incomplete state-action values, an episode generated using target policy can often result in extremely long episodes (close to infinite loops), which is far from what we'd like to see.
+
+For this reason, when a incompletely trained state is inquired for target policy, we return a random policy instead of a deterministic policy. This choice can quite effectively avoid the generation of long episodes.
+
+```cpp
+public:
     /// Returns the action under the current target policy for a specific state
     /// @param carState Car state to be inquired
     std::tuple<int, int> getTargetPolicy(state_tuple carState) const;
@@ -159,4 +172,5 @@ private:
 };
 ```
 
-
+### The race track visualizer
+We create our race track visualization module, TrackVisualizer, using the well-known SFML library for C++. 
