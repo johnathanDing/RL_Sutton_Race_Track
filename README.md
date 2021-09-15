@@ -158,7 +158,7 @@ One important caveat lies in the target policy. Since the soft behavior policy-g
 
 Under such situation, if target policy deterministically returns an action based on initial values or incomplete state-action values, an episode generated using target policy can often result in extremely long episodes (close to infinite loops), which is far from what we'd like to see.
 
-For this reason, when a incompletely trained state is inquired for target policy, we return a random policy instead of a deterministic policy. This choice can quite effectively avoid the generation of long episodes.
+For this reason, when an incompletely trained state is inquired for target policy, we return a random policy instead of a deterministic policy. This choice can quite effectively avoid the generation of long episodes.
 
 ```cpp
 public:
@@ -173,4 +173,46 @@ private:
 ```
 
 ### The race track visualizer
-We create our race track visualization module, TrackVisualizer, using the well-known SFML library for C++. 
+We create our race track visualization module, TrackVisualizer, using the well-known SFML library for C++. It takes in the race track module, TrackData, and draws track grid, startling line, finish line as red, green, and blue squares, respectively. 
+
+```cpp
+/// Class that creates a window to visualize race track and car movement
+class TrackVisualizer
+{
+private:
+    int trackSize;
+    // A constant reference to given race track
+    const vector_2D& raceTrack;
+    // Container of a SFML window
+    sf::RenderWindow trackWindow;
+    // Pixel size of a single grid
+    float gridPixel;
+public:
+    /// TrackVisualizer constructor
+    /// @param inputTrack Input TrackData class instance.
+    TrackVisualizer(const TrackData& inputTrack);
+private:
+    /// Starts a race track window
+    void startWindow();
+    
+    /// Draw race track grid to window
+    void drawTrackGrid();
+    
+    /// Draws the current position of car
+    /// @param carState tuple representing the current state of car
+    void drawCarState(state_tuple carState);
+};
+```
+
+The visualizer can also take in an entire episode, and plot the race car on track as white square.
+
+```cpp
+public:
+    /// Draws the race track given a car trajectory
+    /// @param carEpisode A full trajectory of car episode
+    void drawRaceTrack(std::vector<state_action_reward_prob> carEpisode);
+```
+
+## Off-Policy Monte Carlo control
+![Off-policy MC algorithm](./Examples/Off_Policy_MC_Control.png)
+
