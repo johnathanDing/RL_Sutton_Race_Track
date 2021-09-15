@@ -21,13 +21,15 @@ The problem mimics a over-simplified model of an autonomous race car driving on 
 
 We choose to use Off-Policy Monte Carlo control for this problem. The reason we do so is that we prefer a deterministic (greedy) target policy after training (General Policy Iterations), since we're driving a race car and wouldn't want much randomness in our policy. Off-Policy control enables us to do that through using a different, behaivor policy during the GPI training process. 
 
-The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. We'll encounter both of these advantage and disadvantage during our solution process.
+The advantage of Off-Policy control is that behavior policy, which could even change in between or during episodes, can continue exploring action options while target policy converges to an optimal policy. The disadvantage is that the training can be slow compared to on-policy control, due to the nature of behavior policy exploration and importance sampling required. 
+
+We'll encounter both of these advantage and disadvantage during our solution process.
 
 ## Essential Modules
 We start tackling our problem by first preparing all the modules essential to our Monte Carlo reinforcement learning problem: the environment (race track and response), the state-action space and policies, Monte Carlo episode generators, and the visualizer of the race track.
 
 ### The race track environment
-We study square race tracks without loosing generality. A race track has its starting line on the bottom of the square board, gradually steers towards right with some random walk, and ends on the finish line on the right boarder of the square board.
+We study square race tracks without loosing generality. A race track has its starting line on the bottom of the square board, gradually steers towards right with some random walk. Once past a certain point (row), the track has a high chance of going straight right, and ends on the finish line on the right boarder of the square board.
 
 Sample visualizations of some viable race tracks can be as following:
 ![raceTrack example](./Examples/RaceTrack_Examples.png)
@@ -58,4 +60,40 @@ private:
 };
 ```
 
+We then construct an environment that transitions a given state-action pair to the next state, while also giving feedback on the reward and whether the finish line is crossed. As per the problem statement, if car races out of track, it will be reset to a random starting line position unless the finishe line is crossed.
 
+```cpp
+using state_tuple = std::tuple<int, int, int, int>;
+/// Struct storing env response including reward, next state, and whether the finish line has been crossed
+struct envResponse
+{
+    // Reward to the step
+    int reward;
+    // The next state(four-) tuple
+    state_tuple nextState;
+    // Whether the finish line is crossed at this step
+    bool finished;
+};
+/// Class that simulates the track environment
+class TrackEnv
+{
+private:
+    int trackSize;
+    // A constant reference to given race track
+    const vector_2D& raceTrack;
+    // Easy access to starting line positions
+    std::vector<std::tuple<int, int>> startLine;
+    // Easy access to finish line positions
+    std::vector<std::tuple<int, int>> finishLine;
+public:
+    /// Construct track parameters based on input TrackData
+    /// @param inputTrack Input TrackData class instance
+    TrackEnv(const TrackData& inputTrack);
+    /// Returns a random starting state as state (4-) tuple
+    state_tuple getStartState() const;
+    /// Given current state and action (acceleration), return the next environment response struct
+    /// @param currState Current state tuple
+    /// @param acceleration Chosen action
+    envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration) const;
+};
+```
