@@ -60,7 +60,7 @@ private:
 };
 ```
 
-We then construct an environment that transitions a given state-action pair to the next state, while also giving feedback on the reward and whether the finish line is crossed. As per the problem statement, if car races out of track, it will be reset to a random starting line position unless the finishe line is crossed.
+We then construct an environment, TrackEnv. The environment transitions a given state-action pair to the next state, while also giving feedback on the reward (-1) and whether the finish line is crossed. As per the problem statement, if car races out of track, it will be reset to a random starting line position unless the finishe line is crossed.
 
 ```cpp
 using state_tuple = std::tuple<int, int, int, int>;
@@ -97,3 +97,66 @@ public:
     envResponse getEnvResponse(state_tuple currState, std::tuple<int, int> acceleration) const;
 };
 ```
+
+### The racing policy
+The policy class, TrackPolicy, is the core module of our reinforcement learning story. It records all state-action pairs visited, their current state-action value, importance-sampling weight. It then derives the behavior and target control policies from these data. 
+
+Since Off-Policy controls can have great degree of freedom in customizing the behaivor policy, our policy module also records state visit counts, setter and getter of epsilon-soft parameter, etc... to enable versatile customization of the behavior policy as long as state-action coverage is ensured.
+
+```cpp
+std::vector<std::tuple<int, int>> actionSpace(state_tuple carState);
+
+/// Class that stores state action (Q-) values, makes and modifies target and behavior policies
+class TrackPolicy
+{
+private:
+    // Stores the state-action space
+    std::map<state_tuple, std::vector<std::tuple<int, int>>> stateActionSpace;
+    // Stores the state-action cumulative weight
+    std::map<state_tuple, std::vector<double>> stateActionWeight;
+    // Stores the state-action value
+    std::map<state_tuple, std::vector<double>> stateActionValue;
+    // Stores the state-action count of visits
+    std::map<state_tuple, int> stateVisitCount;
+    // Soft parameter for the behavior policy
+    double epsilonSoft;
+    // Threshold for soft behavior policy to become greedy
+    int stateVisitThreshold;
+public:
+    /// Constructor for the TrackPolicy class
+    /// @param epsilonInput Initial value for the behavior policy epsilon soft parameter. Default is 1.0, a uniformly random policy.
+    /// @param stateVisitThreshInput How many visits to a state before starting to converge behavior policy to target policy
+    TrackPolicy(double epsilonInput = 1.0, int stateVisitThreshInput = 100);
+    /// Updates the state-action (Q-) value according to new observed values. Returns void type.
+    /// @param carState Car state to be updated
+    /// @param acc Action (Acceleration) to be updated
+    /// @param newReturn G, the new return value to be updated
+    /// @param newWeight W, the new sampling weight to be updated
+    void updateStateActionVal(state_tuple carState, std::tuple<int, int> acc, double newReturn, double newWeight);
+    /// Returns the current state-aciton value.
+    /// @param carState Car state to be inquired
+    /// @param acc Action (Acceleration) to be inquired
+    double getStateActionVal(state_tuple carState, std::tuple<int, int> acc) const;
+    /// Sets the epsilon soft parameter of the behavior state
+    /// @param epsilon Epsilon soft parameter
+    void setBehaveEpsilon(double epsilon);
+    /// Returns the current epsilon soft parameter of the behavior policy
+    double getBehaveEpsilon() const;
+    /// Returns the action and probability (importance sampling) under behavior policy for a specific state
+    /// @param carState Car state to be inquired
+    std::tuple<int, int> getBehavePolicy(state_tuple carState) const;
+    /// Get the probability of getting such action from behavior policy for importance sampling
+    /// @param carState Car state inquired
+    /// @param acc Action inquired
+    double getBehaveProb(state_tuple carState, std::tuple<int, int> acc) const;
+    /// Returns the action under the current target policy for a specific state
+    /// @param carState Car state to be inquired
+    std::tuple<int, int> getTargetPolicy(state_tuple carState) const;
+private:
+    /// Get a random viable policy based on the car state
+    /// @param carState Car state inquired
+    std::tuple<int, int> getRandomPolicy(state_tuple carState) const;
+};
+```
+
+
