@@ -222,7 +222,7 @@ Our main function implements the Off-Policy MC control algorithm, as outlined ab
 One example set of results is as following:
 
 <p float="left">
-  <img src="./Examples/OneEpisodeRecording_2.gif" width="30%" />
+  <img src="./Examples/OneEpisodeRecording_2.gif" width="27%" />
   <img src="./Examples/Example2_Results.png" width="67%" /> 
 </p>
 
