@@ -1,7 +1,9 @@
 # Sutton's Autonomous Racetrack with Off-policy Monte-Carlo control
 
-![Target Episode Demo1](./Examples/OneEpisodeRecording_2.gif)
-![Target Episode Demo2](./Examples/OneEpisodeRecording_3.gif)
+<p float="center">
+  <img src="./Examples/OneEpisodeRecording_2.gif" width="45%" />
+  <img src="./Examples/OneEpisodeRecording_3.gif" width="45%"/> 
+</p>
 
 This is a simple attempt to solve the race track problem in Sutton's book, using Off-policy Monte-Carlo control method.
 
