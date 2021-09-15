@@ -226,11 +226,20 @@ Such strategy has two advantages: 1) it can ensure that we explore all available
 
 We also record the number of training episodes and their total returns for result analysis purpose. At the end, 1k episodes generated through target policy is evaluated to analyze the quality of our training model. 
 
-One example set of results is as following:
+Two sets of results are shown as following:
+
+Example 1:
 
 <p float="center">
   <img src="./Examples/OneEpisodeRecording_2.gif" width="28%" />
   <img src="./Examples/Example2_Results.png" width="67%" /> 
+</p>
+
+Example 2:
+
+<p float="center">
+  <img src="./Examples/OneEpisodeRecording_3.gif" width="28%" />
+  <img src="./Examples/Example3_Results.png" width="67%" /> 
 </p>
 
 ## Result discussion
