@@ -230,7 +230,7 @@ One example set of results is as following:
   <img src="./Examples/Example2_Results.png" width="67%" /> 
 </p>
 
-### Result discussion
+## Result discussion
 From the behavior training result, it is evident that the training process started from tail steps, quickly converged to optimal actions for those few tail states, thus drastically reducing the average episode returns. As the training moved deeper into each episode, the improvement rate slows down, due to the quickly branching variations of episodes. Even after 8 million behavior episdoes, which took 1 hr on our Macbook, the training was still improving and not yet plateaued.
 
 Based on the 1k target episode histogram, we can also observe that the distribution heavily was tilting towards high returns (> -30), proving that our Off-Policy MC control trained the autonomous race car as expected. However, not all target episodes perform better than behaviro episodes, due to incompletely trained starting and intermediate states that leads to random actions, according to our previous discussion. Nontheless, the average -183 episode return is a far better performance compared to the < -200 episode return at the end of behavior policy training. 
